@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4324291161046007051}
   m_Layer: 0
   m_Name: Trap5
-  m_TagString: Trap
+  m_TagString: Damage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

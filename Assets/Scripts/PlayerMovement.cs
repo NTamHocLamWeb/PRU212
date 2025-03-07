@@ -1,31 +1,30 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-	[SerializeField] float jumpSpeed = 5f;
+	[SerializeField] private float jumpSpeed = 5f;
+	[SerializeField] private float moveSpeed = 3f;
+	[SerializeField] private GameObject bulletPrefab;
+	[SerializeField] private Transform firePoint;
+	[SerializeField] private float fireRate = 5f;
+	[SerializeField] private float bulletValue = 20f;
+	[SerializeField] public int health = 5;
 	private Rigidbody2D myRigidbody;
-	public float moveSpeed = 3f;
 	Vector2 moveInput;
 	Animator myAnimator;
-	public LayerMask groundLayer;
-	private bool isGrounded;
-	PolygonCollider2D myBodyCollider;
 	BoxCollider2D myFeetCollider;
-	public GameObject bulletPrefab;
-	public Transform firePoint;
+	bool isJump = false;
 	bool isAlive = true;
-	public float fireRate = 0.5f;
-	private float nextFireTime = 0f;
-	public float bulletValue = 20f;
-	int health = 10;
+	private float nextFireTime = 5f;
+	public GameEvent playerDamagedEvent;
+	private bool isInvincible = false;
+	private float invincibilityDuration = 1.0f;
 
 	void Start()
 	{
 		myAnimator = GetComponent<Animator>();
-		myBodyCollider = GetComponent<PolygonCollider2D>();
 		myRigidbody = GetComponent<Rigidbody2D>();
 		myFeetCollider = GetComponent<BoxCollider2D>();
 	}
@@ -33,89 +32,102 @@ public class PlayerMovement : MonoBehaviour
 	void Update()
 	{
 		if (!isAlive) { return; }
-		if (Input.GetKey(KeyCode.J) && Time.time >= nextFireTime)
-		{
-			if (Mathf.Abs(myRigidbody.velocity.x) > Mathf.Epsilon) 
-			{ 
-				myAnimator.SetBool("isRunningAndShooting", true); 
-			} else 
-			{ 
-				myAnimator.SetBool("isRunningAndShooting", false);
-				myAnimator.SetTrigger("Shoot");
-			}
-			nextFireTime = Time.time + fireRate;
-			StartCoroutine(Fire());
-		}
-
-		
-
 		FlipSprite();
-		Run();
+		
 	}
 	void OnJump(InputValue value)
 	{
 		if (!isAlive) { return; }
 
+		if (!myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Mainground"))) { return; }
+
 		if (value.isPressed)
 		{
-			// do stuff
+			myAnimator.SetBool("isJumping", true);
 			myRigidbody.velocity += new Vector2(0f, jumpSpeed);
-			myAnimator.SetTrigger("Jump");
+		}
+	}
+
+	private void OnCollisionEnter2D(Collision2D collision)
+	{
+		if (myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Mainground")))
+		{
+			myAnimator.SetBool("isJumping", false);
 		}
 	}
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if (collision.CompareTag("Trap"))
+		if (collision.CompareTag("Damage") && !isInvincible)
 		{
-			health--;
-			if (health > 0)
-			{
-				myAnimator.SetTrigger("isHit");
-			}
-			else
-			{
-				myAnimator.SetTrigger("isDie");
-				isAlive = false;
-			}
+			StartCoroutine(TakeDamage());
 		}
+	}
+
+	private IEnumerator TakeDamage()
+	{
+		isInvincible = true;
+		health--;
+
+		playerDamagedEvent.RaiseEvent(health);
+		myAnimator.SetTrigger("isHit");
+
+		if (health <= 0)
+		{
+			myAnimator.SetTrigger("isDie");
+		}
+
+		yield return new WaitForSeconds(invincibilityDuration);
+		isInvincible = false;
 	}
 
 	void OnMove(InputValue value)
 	{
 		if (!isAlive) { return; }
 		moveInput = value.Get<Vector2>();
-		Debug.Log("OnMove called with value: " + moveInput);
-	}
-
-	void Run()
-	{
 		Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed, myRigidbody.velocity.y);
 		myRigidbody.velocity = playerVelocity;
-
+		if (!myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Mainground"))) { return; }
 		bool playerHasHorizontalSpeed = Mathf.Abs(myRigidbody.velocity.x) > Mathf.Epsilon;
 		myAnimator.SetBool("isRunning", playerHasHorizontalSpeed);
+	}
 
-		Debug.Log("Player velocity: " + myRigidbody.velocity);
+	void OnFire(InputValue value)
+	{
+		if (!isAlive) { return; }
+		if (!myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Mainground"))) { return; }
+		if (value.isPressed && Time.time >= nextFireTime)
+		{
+			if (Mathf.Abs(myRigidbody.velocity.x) > Mathf.Epsilon)
+			{
+				myAnimator.SetTrigger("RunningAndShooting");
+			}
+			else
+			{
+				myAnimator.SetTrigger("Shoot");
+			}
+			nextFireTime = Time.time + fireRate;
+			StartCoroutine(Fire());
+		}
 	}
 
 	void FlipSprite()
 	{
 		if (moveInput.x > 0)
 		{
-			transform.localScale = new Vector2(4, 4);
+			transform.localScale = new Vector2(1, 1);
 			bulletValue = 20f;
 		}
 		else if (moveInput.x < 0)
 		{
-			transform.localScale = new Vector2(-4, 4);
+			transform.localScale = new Vector2(-1, 1);
 			bulletValue = -20f;
 		}
 	}
 
 	IEnumerator Fire()
 	{
-		yield return new WaitForSeconds(0.9f);
+		yield return new WaitForSeconds(0.5f);
 		GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
 		Bullet script = bullet.GetComponent<Bullet>();
 		if (script != null)

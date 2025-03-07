@@ -9,6 +9,7 @@ TagManager:
   - Zombie
   - Trap
   - Enemy
+  - Damage
   layers:
   - Default
   - TransparentFX
@@ -16,13 +17,13 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Background
+  - Foreground
+  - Mainground
+  - Subground
+  - Player
+  - Enemie
+  - Item
   - 
   - 
   - 
@@ -45,4 +46,28 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 1043393405
+    locked: 0
+  - name: Background
+    uniqueID: 2793540641
+    locked: 0
+  - name: Foreground
+    uniqueID: 8046195
+    locked: 0
+  - name: Mainground
+    uniqueID: 3593930095
+    locked: 0
+  - name: Subground
+    uniqueID: 3620216603
+    locked: 0
+  - name: Enemie
+    uniqueID: 1143801777
+    locked: 0
+  - name: Player
+    uniqueID: 1756504329
+    locked: 0
+  - name: Item
+    uniqueID: 1696518359
     locked: 0
