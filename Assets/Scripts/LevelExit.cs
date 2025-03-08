@@ -8,6 +8,7 @@ public class LevelExit : MonoBehaviour
     [SerializeField] float levelLoadDelay = 1f;
     private CircleCollider2D circleCollider2D;
     private Animator animator;
+    private bool isEnter = false;
 
     private void Start()
     {
@@ -15,31 +16,34 @@ public class LevelExit : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (circleCollider2D.IsTouchingLayers(LayerMask.GetMask("Player")))
-        {
-            StartCoroutine(LoadNextLevel());
-        }
-    }
+	//private void OnCollisionEnter2D(Collision2D collision)
+	//{
+	//    if (circleCollider2D.IsTouchingLayers(LayerMask.GetMask("Player")))
+	//    {
+	//        StartCoroutine(LoadNextLevel());
+	//    }
+	//}
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            animator.SetTrigger("Enter");
-        }
-    }
+	private void OnTriggerEnter2D(Collider2D other)
+	{
+		if (other.CompareTag("Player"))
+		{
+			animator.SetBool("IsEnter", true);
+			isEnter = true;
+		}
+	}
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            animator.SetTrigger("Exist");
-        }
-    }
+	private void OnTriggerExit2D(Collider2D other)
+	{
+		if (other.CompareTag("Player") && isEnter)
+		{
+			animator.SetBool("IsExit", true);
+			isEnter = false;
+		}
+	}
 
-    IEnumerator LoadNextLevel()
+
+	IEnumerator LoadNextLevel()
     {
         yield return new WaitForSecondsRealtime(levelLoadDelay);
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;

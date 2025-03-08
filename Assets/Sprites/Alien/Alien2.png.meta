@@ -113,10 +113,10 @@ TextureImporter:
       name: Alien2_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 208
-        width: 48
-        height: 48
+        x: 12
+        y: 219
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,10 +134,10 @@ TextureImporter:
       name: Alien2_1
       rect:
         serializedVersion: 2
-        x: 48
-        y: 208
-        width: 48
-        height: 48
+        x: 60
+        y: 219
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -155,10 +155,10 @@ TextureImporter:
       name: Alien2_2
       rect:
         serializedVersion: 2
-        x: 96
-        y: 208
-        width: 48
-        height: 48
+        x: 108
+        y: 219
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -176,10 +176,10 @@ TextureImporter:
       name: Alien2_3
       rect:
         serializedVersion: 2
-        x: 144
-        y: 208
-        width: 48
-        height: 48
+        x: 157
+        y: 219
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -197,10 +197,10 @@ TextureImporter:
       name: Alien2_4
       rect:
         serializedVersion: 2
-        x: 192
-        y: 208
-        width: 48
-        height: 48
+        x: 205
+        y: 219
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -218,10 +218,10 @@ TextureImporter:
       name: Alien2_5
       rect:
         serializedVersion: 2
-        x: 240
-        y: 208
-        width: 48
-        height: 48
+        x: 252
+        y: 219
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -239,10 +239,10 @@ TextureImporter:
       name: Alien2_6
       rect:
         serializedVersion: 2
-        x: 0
-        y: 171
-        width: 48
-        height: 48
+        x: 12
+        y: 182
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -260,10 +260,10 @@ TextureImporter:
       name: Alien2_7
       rect:
         serializedVersion: 2
-        x: 48
-        y: 171
-        width: 48
-        height: 48
+        x: 60
+        y: 182
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -281,10 +281,10 @@ TextureImporter:
       name: Alien2_8
       rect:
         serializedVersion: 2
-        x: 96
-        y: 171
-        width: 48
-        height: 48
+        x: 107
+        y: 182
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -302,10 +302,10 @@ TextureImporter:
       name: Alien2_9
       rect:
         serializedVersion: 2
-        x: 144
-        y: 171
-        width: 48
-        height: 48
+        x: 157
+        y: 182
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -323,10 +323,10 @@ TextureImporter:
       name: Alien2_10
       rect:
         serializedVersion: 2
-        x: 192
-        y: 171
-        width: 48
-        height: 48
+        x: 204
+        y: 182
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -344,10 +344,10 @@ TextureImporter:
       name: Alien2_11
       rect:
         serializedVersion: 2
-        x: 240
-        y: 171
-        width: 48
-        height: 48
+        x: 253
+        y: 182
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -365,10 +365,10 @@ TextureImporter:
       name: Alien2_12
       rect:
         serializedVersion: 2
-        x: 0
-        y: 134
-        width: 48
-        height: 48
+        x: 12
+        y: 143
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -386,10 +386,10 @@ TextureImporter:
       name: Alien2_13
       rect:
         serializedVersion: 2
-        x: 48
-        y: 134
-        width: 48
-        height: 48
+        x: 60
+        y: 143
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -407,10 +407,10 @@ TextureImporter:
       name: Alien2_14
       rect:
         serializedVersion: 2
-        x: 96
-        y: 134
-        width: 48
-        height: 48
+        x: 105
+        y: 143
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -428,10 +428,10 @@ TextureImporter:
       name: Alien2_15
       rect:
         serializedVersion: 2
-        x: 144
-        y: 134
-        width: 48
-        height: 48
+        x: 153
+        y: 143
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -449,10 +449,10 @@ TextureImporter:
       name: Alien2_16
       rect:
         serializedVersion: 2
-        x: 192
-        y: 134
-        width: 48
-        height: 48
+        x: 202
+        y: 143
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -470,10 +470,10 @@ TextureImporter:
       name: Alien2_17
       rect:
         serializedVersion: 2
-        x: 240
-        y: 134
-        width: 48
-        height: 48
+        x: 252
+        y: 143
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -491,10 +491,10 @@ TextureImporter:
       name: Alien2_24
       rect:
         serializedVersion: 2
-        x: 0
-        y: 58
-        width: 48
-        height: 48
+        x: 11
+        y: 67
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -512,10 +512,10 @@ TextureImporter:
       name: Alien2_25
       rect:
         serializedVersion: 2
-        x: 48
-        y: 58
-        width: 48
-        height: 48
+        x: 63
+        y: 67
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -533,10 +533,10 @@ TextureImporter:
       name: Alien2_26
       rect:
         serializedVersion: 2
-        x: 96
-        y: 58
-        width: 48
-        height: 48
+        x: 112
+        y: 67
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -554,10 +554,10 @@ TextureImporter:
       name: Alien2_27
       rect:
         serializedVersion: 2
-        x: 144
-        y: 58
-        width: 48
-        height: 48
+        x: 164
+        y: 67
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -575,10 +575,10 @@ TextureImporter:
       name: Alien2_28
       rect:
         serializedVersion: 2
-        x: 192
-        y: 58
-        width: 48
-        height: 48
+        x: 212
+        y: 67
+        width: 24
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -593,34 +593,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Alien2_30
-      rect:
-        serializedVersion: 2
-        x: 3
-        y: 35
-        width: 24
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 572224b4cf372d24785dfd42f25265a7
-      internalID: 771758969
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Alien2_18
       rect:
         serializedVersion: 2
-        x: 36
-        y: 35
-        width: 24
-        height: 24
+        x: 7
+        y: 39
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -638,10 +617,10 @@ TextureImporter:
       name: Alien2_19
       rect:
         serializedVersion: 2
-        x: 69
-        y: 35
-        width: 24
-        height: 24
+        x: 40
+        y: 39
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -659,10 +638,10 @@ TextureImporter:
       name: Alien2_20
       rect:
         serializedVersion: 2
-        x: 101
-        y: 35
-        width: 24
-        height: 24
+        x: 73
+        y: 39
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -680,10 +659,10 @@ TextureImporter:
       name: Alien2_21
       rect:
         serializedVersion: 2
-        x: 132
-        y: 35
-        width: 24
-        height: 24
+        x: 104
+        y: 39
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -693,6 +672,27 @@ TextureImporter:
       bones: []
       spriteID: 93bec679c63480045aa19eb2ffecf06a
       internalID: -321202705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Alien2_22
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 39
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36653b9fafaefda4a851a43f9c9d407b
+      internalID: -220480874
       vertices: []
       indices: 
       edges: []
@@ -730,21 +730,8 @@ TextureImporter:
       Alien2_26: 694006244
       Alien2_27: 1489575658
       Alien2_28: -1587925436
-      Alien2_29: 388571925
       Alien2_3: 1266542907
-      Alien2_30: 771758969
-      Alien2_31: -2079172234
-      Alien2_32: 42686213
-      Alien2_33: 1704937681
-      Alien2_34: -171928627
-      Alien2_35: -1099346820
-      Alien2_36: 1117484189
-      Alien2_37: -345408056
-      Alien2_38: -542877863
-      Alien2_39: -973076023
       Alien2_4: 1814095622
-      Alien2_40: 693963865
-      Alien2_41: 1474162967
       Alien2_5: -1271070936
       Alien2_6: 1831128977
       Alien2_7: 1497902296
