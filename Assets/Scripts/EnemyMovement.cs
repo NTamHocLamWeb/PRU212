@@ -2,31 +2,49 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyMovement : MonoBehaviour
 {
 	[SerializeField] float moveSpeed = 1f;
-	int health = 100;
+	public float maxHealth = 100f;
+	private float currentHealth;
 	Rigidbody2D myRigidbody;
 	Animator myAnimator;
 	bool isAlive = true;
 	public float attackRange = 1.5f;
 	public int damage = 10;
+	private EnemyAttack attackScript;
+	public float attackCooldown = 2f;
+	private float lastAttackTime;
+	private bool playerInRange = false;
+	bool isStop = false;
+	public Transform healthFill;
+	private Vector3 healthFillOriginalPos;
 
 	void Start()
 	{
+		currentHealth = maxHealth;
+		healthFillOriginalPos = healthFill.localPosition;
+		attackScript = GetComponent<EnemyAttack>();
 		myRigidbody = GetComponent<Rigidbody2D>();
 		myAnimator = GetComponent<Animator>();
 	}
 
 	void Update()
 	{
-		if (isAlive)
+		if (isAlive && !isStop)
 		{
 			myRigidbody.velocity = new Vector2(moveSpeed, 0f);
+
+			if (moveSpeed != 0)
+			{
+				FlipEnemyFacing();
+			}
 		}
-		else
+		else if (!isAlive)
 		{
+			myRigidbody.velocity = Vector2.zero;
 			StartCoroutine(WaitToDestroy());
 		}
 	}
@@ -38,25 +56,57 @@ public class EnemyMovement : MonoBehaviour
 			TakeDamage(10);
 		}
 	}
+	public void SetPlayerInRange(bool inRange)
+	{
+		playerInRange = inRange;
+		if (playerInRange)
+		{
+			TryAttack();
+		}
+	}
 
+	void TryAttack()
+	{
+		if (playerInRange && Time.time > lastAttackTime + attackCooldown)
+		{
+			isStop = true;
+			myAnimator.SetTrigger("isAttack");
+			myRigidbody.velocity = Vector2.zero;
+			lastAttackTime = Time.time;
+			StartCoroutine(Stun());
+		}
+	}
 	void OnTriggerExit2D(Collider2D other)
 	{
-		if (!isAlive)
+		if (other.CompareTag("Player"))
 		{
-			moveSpeed = 0f;
+			playerInRange = false;
 		}
-		else
+
+		if (!isAlive || isStop)
 		{
-			moveSpeed = -moveSpeed;
-			FlipEnemyFacing();
+			return;
 		}
+
+		moveSpeed = -moveSpeed;
+		FlipEnemyFacing();
 	}
 
 	void TakeDamage(int damage)
 	{
-		health -= damage;
-		if (health > 0)
+		currentHealth -= damage;
+		float healthPercent = Mathf.Clamp(currentHealth / maxHealth, 0, 1);
+
+		healthFill.localScale = new Vector3(healthPercent, 0.1f, 1);
+		healthFill.localPosition = new Vector3(
+			healthFillOriginalPos.x - (1 - healthPercent) * 0.5f,
+			healthFillOriginalPos.y,
+			healthFillOriginalPos.z
+		);
+
+		if (currentHealth > 0)
 		{
+			isStop = true;
 			myAnimator.SetTrigger("isHit");
 			StartCoroutine(Stun());
 		}
@@ -69,10 +119,8 @@ public class EnemyMovement : MonoBehaviour
 
 	IEnumerator Stun()
 	{
-		float originalSpeed = moveSpeed;
-		moveSpeed = 0f;
-		yield return new WaitForSeconds(1f);
-		moveSpeed = originalSpeed;
+		yield return new WaitForSeconds(2f);
+		isStop = false;
 	}
 
 	IEnumerator WaitToDestroy()
@@ -83,11 +131,11 @@ public class EnemyMovement : MonoBehaviour
 
 	void FlipEnemyFacing()
 	{
-		transform.localScale = new Vector2(-(Mathf.Sign(myRigidbody.velocity.x) * 1f), 1f);
+		transform.localScale = new Vector2((Mathf.Sign(myRigidbody.velocity.x) * 1f), 1f);
 	}
 
 	public void Attack()
 	{
-		myAnimator.SetTrigger("isAttack");
+		attackScript.PerformAttack();
 	}
 }

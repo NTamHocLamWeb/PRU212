@@ -11,6 +11,8 @@ public class GameSession : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI livesText;
     [SerializeField] TextMeshProUGUI scoreText;
+    public GameObject gameOver;
+
 
     void Awake()
     {
@@ -29,6 +31,7 @@ public class GameSession : MonoBehaviour
     {
         livesText.text = playerLives.ToString();
         scoreText.text = score.ToString();
+        gameObject.SetActive(false);
     }
 
     //public void ProcessPlayerDeath()
@@ -55,6 +58,11 @@ public class GameSession : MonoBehaviour
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);
         livesText.text = playerLives.ToString();
+    }
+
+    public void GameOver()
+    {
+        gameObject.SetActive(true);
     }
 
     //void ResetGameSession()

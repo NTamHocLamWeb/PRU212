@@ -29,6 +29,7 @@ public class LevelExit : MonoBehaviour
 		if (other.CompareTag("Player"))
 		{
 			animator.SetBool("IsEnter", true);
+			animator.SetBool("IsExit", false);
 			isEnter = true;
 		}
 	}
@@ -38,8 +39,14 @@ public class LevelExit : MonoBehaviour
 		if (other.CompareTag("Player") && isEnter)
 		{
 			animator.SetBool("IsExit", true);
+			animator.SetBool("IsEnter", false);
 			isEnter = false;
 		}
+	}
+
+	private void OnTriggerStay2D(Collider2D collision)
+	{
+		
 	}
 
 

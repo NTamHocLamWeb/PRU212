@@ -1,35 +1,34 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TrapTrigger : MonoBehaviour
 {
-    PolygonCollider2D collider2D;
     Animator animator;
-	public float damage = 10f;
-    private bool canDamage = false;
+    public GameObject attackArea;
+    public float attackDelay = 0.5f;
+	public float attackDuration = 0.5f;
+
 	void Start()
     {
-        collider2D = GetComponent<PolygonCollider2D>();
         animator = GetComponent<Animator>();
-    }
+        attackArea.SetActive(false);
+	}
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
-    }
-
-    void Attack()
-    {
-        canDamage = true;
-    }
-
-	private void OnTriggerEnter2D(Collider2D collision)
-	{
-		if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player"))
         {
             animator.SetTrigger("Touch");
-        }
+		}
+    }
+    public void Attack()
+    {
+		StartCoroutine(EnableHitbox());
+	}
+	IEnumerator EnableHitbox()
+	{
+		attackArea.SetActive(true);
+        yield return new WaitForSeconds(attackDuration);
+		attackArea.SetActive(false);
 	}
 }

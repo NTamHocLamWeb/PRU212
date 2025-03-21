@@ -6,12 +6,20 @@ public class Bullet : MonoBehaviour
 {
 	public float speed = 20f; 
 	public Animator animator;
-	public Rigidbody2D rb; 
+	public Rigidbody2D rb;
+	private AudioManager audioManager;
+
+	private void Awake()
+	{
+		audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+	}
+
 	void Start() 
 	{ 
 		rb = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
-		rb.velocity = transform.right * speed; 
+		rb.velocity = transform.right * speed;
+		audioManager.PlaySFX(audioManager.shotClip);
 	}
 
 	private void OnTriggerEnter2D(Collider2D collision)
@@ -21,8 +29,13 @@ public class Bullet : MonoBehaviour
 			animator.SetTrigger("Hit");
 			Debug.Log("Touch enemy");
 			rb.velocity = Vector2.zero;
-			rb.isKinematic = true;
+			GetComponent<Collider2D>().enabled = false;
 			StartCoroutine(WaitToDestroy());
+		}
+
+		if (collision.gameObject.layer == LayerMask.NameToLayer("Mainground"))
+		{
+			Destroy(gameObject);
 		}
 	}
 

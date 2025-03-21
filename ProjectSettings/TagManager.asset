@@ -10,6 +10,7 @@ TagManager:
   - Trap
   - Enemy
   - Damage
+  - Audio
   layers:
   - Default
   - TransparentFX
