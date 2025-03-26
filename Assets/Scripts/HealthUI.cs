@@ -40,9 +40,13 @@ public class HealthUI : MonoBehaviour
 		{
 			healthImage.sprite = life2;
 		}
+		else if (health == 1)
+        {
+			healthImage.sprite = life1;
+		}
 		else
 		{
-			healthImage.sprite = life1;
+			Destroy(healthImage);
 		}
 	}
 }

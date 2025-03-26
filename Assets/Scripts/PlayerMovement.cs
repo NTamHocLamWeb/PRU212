@@ -4,11 +4,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-	private float jumpSpeed = 3.5f;
-	private float moveSpeed = 3f;
+    [SerializeField] private float jumpSpeed = 5f;
+    [SerializeField] private float moveSpeed = 3f;
 	[SerializeField] private GameObject bulletPrefab;
 	[SerializeField] private Transform firePoint;
-	[SerializeField] private float fireRate = 5f;
 	[SerializeField] private float bulletValue = 20f;
 	[SerializeField] public int health = 5;
 	[SerializeField] public int energy = 6;
@@ -17,17 +16,25 @@ public class PlayerMovement : MonoBehaviour
 	Animator myAnimator;
 	BoxCollider2D myFeetCollider;
 	bool isAlive = true;
-	private float nextFireTime = 5f;
-	public GameEvent playerDamagedEvent;
-	public GameEvent playerShotEvent;
+	[SerializeField] public GameEvent playerDamagedEvent;
+	[SerializeField] public GameEvent playerShotEvent;
+	[SerializeField] public GameObject gameOver;
 	private bool isInvincible = false;
-	private float invincibilityDuration = 1.0f;
+	private float invincibilityDuration = 0.5f;
 	private SpriteRenderer spriteRenderer;
 	private Color originalColor;
 	private AudioManager audioManager;
+    public GameObject loadBullet;
+    public float reloadTime = 2f;
+    public int maxAmmo = 6;
+    private Vector3 originalScale;
 	private GameSession gameSession;
+    private bool isReloading = false;
+    private bool isShooting = false;
+	private InventoryController inventory;
+    public GameObject lifePrefab;
 
-	void Start()
+    void Start()
 	{
 		myAnimator = GetComponent<Animator>();
 		myRigidbody = GetComponent<Rigidbody2D>();
@@ -35,20 +42,32 @@ public class PlayerMovement : MonoBehaviour
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		originalColor = spriteRenderer.color;
 		audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
-		gameSession = gameSession.GetComponent<GameSession>();
-	}
+        loadBullet.SetActive(false);
+		gameSession = FindObjectOfType<GameSession>();
+		inventory = FindObjectOfType<InventoryController>();
+    }
 
 	void Update()
 	{
 		if (!isAlive) 
 		{
-			gameSession.GameOver();
-		}
-		FlipSprite();
-		
+            StartCoroutine(IsDead());
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            StartCoroutine(UseLife());
+        }
+
+        FlipSprite();
 	}
 
-	void OnMove(InputValue value)
+    void OnEnable()
+    {
+        inventory.LoadInventory();
+    }
+
+    void OnMove(InputValue value)
 	{
 		if (!isAlive) { return; }
 
@@ -74,6 +93,23 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
+    private IEnumerator UseLife()
+    {
+        if (inventory.HasItem(lifePrefab) && health < 5)
+        {
+
+            yield return StartCoroutine(FlashGreen());
+            health++;
+            playerDamagedEvent.RaiseEvent(health);
+            Debug.Log("Gain 1 life");
+            inventory.RemoveItem(lifePrefab);
+        }
+        else
+        {
+            Debug.Log("Not have valid");
+        }
+    }
+
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
 		if (myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Mainground")))
@@ -86,31 +122,40 @@ public class PlayerMovement : MonoBehaviour
 	{
 		if (collision.CompareTag("Damage") && !isInvincible)
 		{
-			StartCoroutine(TakeDamage());
+            StartCoroutine(TakeDamage());
 		}
 	}
 
-	private IEnumerator TakeDamage()
-	{
-		isInvincible = true;
-		health--;
+    private IEnumerator TakeDamage()
+    {
+        if (!isAlive) yield break;
 
-		playerDamagedEvent.RaiseEvent(health);
-		myAnimator.SetTrigger("isHit");
-		audioManager.PlaySFX(audioManager.hurtClip);
-		StartCoroutine(FlashRed());
-		StartCoroutine(Stun());
+        health--;
+        audioManager.PlaySFX(audioManager.hurtClip);
+        isInvincible = true;
+        playerDamagedEvent.RaiseEvent(health);
+        if (health <= 0)
+        {
+            myAnimator.SetTrigger("isDie");
+            moveSpeed = 0f;
+            isAlive = false;
+            StopAllCoroutines();
+            yield break;
+        }
+        float originalSpeed = moveSpeed;
+        moveSpeed = 0f;
+        moveInput = Vector2.zero;
+        myRigidbody.velocity = Vector2.zero;
+        myAnimator.SetTrigger("isHit");
+        yield return StartCoroutine(FlashRed());
+        yield return new WaitForSeconds(0.5f);
+        moveSpeed = originalSpeed;
 
-		if (health <= 0)
-		{
-			myAnimator.SetTrigger("isDie");
-		}
+        yield return new WaitForSeconds(invincibilityDuration);
+        isInvincible = false;
+    }
 
-		yield return new WaitForSeconds(invincibilityDuration);
-		isInvincible = false;
-	}
-
-	IEnumerator Stun()
+    IEnumerator Stun()
 	{
 		float originalSpeed = moveSpeed;
 		moveSpeed = 0f;
@@ -118,24 +163,7 @@ public class PlayerMovement : MonoBehaviour
 		moveSpeed = originalSpeed;
 	}
 
-	void OnFire(InputValue value)
-	{
-		if (!isAlive) { return; }
-		if (!myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Mainground"))) { return; }
-		if (value.isPressed && Time.time >= nextFireTime)
-		{
-			if (Mathf.Abs(myRigidbody.velocity.x) > Mathf.Epsilon)
-			{
-				myAnimator.SetTrigger("RunningAndShooting");
-			}
-			else
-			{
-				myAnimator.SetTrigger("Shoot");
-			}
-			nextFireTime = Time.time + fireRate;
-			StartCoroutine(Fire());
-		}
-	}
+	
 
 	void FlipSprite()
 	{
@@ -150,24 +178,40 @@ public class PlayerMovement : MonoBehaviour
 			bulletValue = -20f;
 		}
 	}
-
-	IEnumerator Fire()
+	void OnFire(InputValue value)
 	{
-		if (energy > 0)
+        if (isReloading || isShooting) return;
+        if (!isAlive) { return; }
+		if (!myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Mainground"))) { return; }
+        if (energy > 0)
+        {
+            energy--;
+            playerShotEvent.RaiseEvent(energy);
+            myAnimator.SetTrigger("Shoot");
+            StartCoroutine(FireCoroutine());
+        }
+        if (energy == 0)
 		{
-			energy--;
-			playerShotEvent.RaiseEvent(energy);
-			yield return new WaitForSeconds(0.5f);
-			GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-			Bullet script = bullet.GetComponent<Bullet>();
-			if (script != null)
-			{
-				script.SetBulletValue(bulletValue);
-			}
-		}
-		else
+            StartCoroutine(ReloadCoroutine());
+        }
+    }
+
+    private IEnumerator FireCoroutine()
+    {
+        isShooting = true;
+
+        yield return new WaitForSeconds(1f);
+
+        isShooting = false;
+    }
+
+    public void Fire()
+	{
+		GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+		Bullet script = bullet.GetComponent<Bullet>();
+		if (script != null)
 		{
-			energy = 6;
+			script.SetBulletValue(bulletValue);
 		}
 	}
 
@@ -177,4 +221,57 @@ public class PlayerMovement : MonoBehaviour
 		yield return new WaitForSeconds(0.2f);
 		spriteRenderer.color = originalColor;
 	}
+
+    IEnumerator FlashGreen()
+    {
+        spriteRenderer.color = Color.green;
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.color = originalColor;
+    }
+
+    private IEnumerator IsDead()
+	{
+		audioManager.StopMusicBackground();
+        moveSpeed = 0f;
+        moveInput = Vector2.zero;
+        myRigidbody.velocity = Vector2.zero;
+        yield return new WaitForSeconds(3f);
+        Time.timeScale = 0f;
+		gameSession.GameOver();
+    }
+
+    private IEnumerator ReloadCoroutine()
+    {
+        isReloading = true;
+        loadBullet.SetActive(true);
+        originalScale = loadBullet.transform.localPosition;
+        float timeElapsed = 0;
+
+        while (timeElapsed < reloadTime)
+        {
+            timeElapsed += Time.deltaTime;
+            float progress = timeElapsed / reloadTime;
+
+            loadBullet.transform.localScale = new Vector3(progress, 0.1f, 1);
+
+            loadBullet.transform.localPosition = new Vector3(
+                originalScale.x - ((1 - progress) * 0.5f),
+                originalScale.y,
+                originalScale.z
+            );
+
+            yield return null;
+        }
+
+        loadBullet.SetActive(false);
+        energy = maxAmmo;
+
+        loadBullet.transform.localScale = originalScale;
+        loadBullet.transform.localPosition = originalScale;
+
+        playerShotEvent.RaiseEvent(energy);
+
+        isReloading = false;
+    }
+
 }

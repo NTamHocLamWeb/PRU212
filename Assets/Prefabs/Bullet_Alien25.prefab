@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -5069088593345680608}
   m_Layer: 10
   m_Name: Bullet_Alien25
-  m_TagString: Bullet
+  m_TagString: Damage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

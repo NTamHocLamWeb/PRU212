@@ -5,64 +5,49 @@ using UnityEngine.SceneManagement;
 
 public class LevelExit : MonoBehaviour
 {
+    public GameObject keyPrefab;
     [SerializeField] float levelLoadDelay = 1f;
     private CircleCollider2D circleCollider2D;
     private Animator animator;
     private bool isEnter = false;
+    private InventoryController inventoryController;
 
     private void Start()
     {
         circleCollider2D = GetComponent<CircleCollider2D>();
         animator = GetComponent<Animator>();
+        inventoryController = FindObjectOfType<InventoryController>();
     }
 
-	//private void OnCollisionEnter2D(Collision2D collision)
-	//{
-	//    if (circleCollider2D.IsTouchingLayers(LayerMask.GetMask("Player")))
-	//    {
-	//        StartCoroutine(LoadNextLevel());
-	//    }
-	//}
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            if (inventoryController.HasItem(keyPrefab))
+            {
+                Debug.Log("C?a m?! Chuy?n màn...");
+                inventoryController.RemoveItem(keyPrefab);
+                animator.SetBool("IsEnter", true);
+                StartCoroutine(LoadNextLevel());
+            }
+            else
+            {
+                Debug.Log("B?n c?n chìa khóa ?? m? c?a!");
+            }
+        }
+    }
 
-	private void OnTriggerEnter2D(Collider2D other)
-	{
-		if (other.CompareTag("Player"))
-		{
-			animator.SetBool("IsEnter", true);
-			animator.SetBool("IsExit", false);
-			isEnter = true;
-		}
-	}
-
-	private void OnTriggerExit2D(Collider2D other)
-	{
-		if (other.CompareTag("Player") && isEnter)
-		{
-			animator.SetBool("IsExit", true);
-			animator.SetBool("IsEnter", false);
-			isEnter = false;
-		}
-	}
-
-	private void OnTriggerStay2D(Collider2D collision)
-	{
-		
-	}
-
-
-	IEnumerator LoadNextLevel()
+    IEnumerator LoadNextLevel()
     {
         yield return new WaitForSecondsRealtime(levelLoadDelay);
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         int nextSceneIndex = currentSceneIndex + 1;
 
-        if (nextSceneIndex == SceneManager.sceneCountInBuildSettings)
+        if (nextSceneIndex >= SceneManager.sceneCountInBuildSettings)
         {
             nextSceneIndex = 0;
         }
-
-        //FindObjectOfType<ScenePersist>().ResetScenePersist();
-        //SceneManager.LoadScene(nextSceneIndex);
+        inventoryController.SaveInventory();
+        SceneManager.LoadScene(nextSceneIndex);
     }
 }
-

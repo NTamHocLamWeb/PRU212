@@ -13,9 +13,10 @@ public class EnergyUI : MonoBehaviour
 	[SerializeField] public Sprite energy3;
 	[SerializeField] public Sprite energy2;
 	[SerializeField] public Sprite energy1;
+    [SerializeField] public Sprite energy0;
 
 
-	private void OnEnable()
+    private void OnEnable()
 	{
 		playerDamagedEvent.OnEventRaised += UpdateHealthUI;
 	}
@@ -47,9 +48,13 @@ public class EnergyUI : MonoBehaviour
 		{
 			energyImage.sprite = energy2;
 		}
-		else
+        else if (energy == 1)
+        {
+            energyImage.sprite = energy1;
+        }
+        else
 		{
-			energyImage.sprite = energy1;
+			energyImage.sprite = energy0;
 		}
 	}
 }

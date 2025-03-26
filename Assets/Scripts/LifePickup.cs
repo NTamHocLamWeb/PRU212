@@ -16,7 +16,6 @@ public class LifePickup : MonoBehaviour
             player.health = player.health + lifeForLifePickup;
             playerDamagedEvent.RaiseEvent(player.health);
             AudioSource.PlayClipAtPoint(coinPickupSFX, Camera.main.transform.position);
-            Destroy(gameObject);
         }
     }
 }

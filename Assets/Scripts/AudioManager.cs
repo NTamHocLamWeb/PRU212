@@ -25,4 +25,10 @@ public class AudioManager : MonoBehaviour
         vfxAudioSource.clip = sfxClip;
         vfxAudioSource.PlayOneShot(sfxClip);
     }
+
+    public void StopMusicBackground()
+    {
+        musicAudioSource.clip = loseClip;
+        musicAudioSource.Play();
+    }
 }

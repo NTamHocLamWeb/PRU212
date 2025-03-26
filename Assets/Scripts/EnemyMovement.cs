@@ -21,8 +21,10 @@ public class EnemyMovement : MonoBehaviour
 	bool isStop = false;
 	public Transform healthFill;
 	private Vector3 healthFillOriginalPos;
+    [SerializeField] private GameObject[] dropItems;
+    [SerializeField] private float dropChance = 0.5f;
 
-	void Start()
+    void Start()
 	{
 		currentHealth = maxHealth;
 		healthFillOriginalPos = healthFill.localPosition;
@@ -113,7 +115,8 @@ public class EnemyMovement : MonoBehaviour
 		else
 		{
 			myAnimator.SetTrigger("isDie");
-			isAlive = false;
+            DropItem();
+            isAlive = false;
 		}
 	}
 
@@ -138,4 +141,14 @@ public class EnemyMovement : MonoBehaviour
 	{
 		attackScript.PerformAttack();
 	}
+
+    private void DropItem()
+    {
+        if (dropItems.Length > 0 && Random.value < dropChance)
+        {
+            int randomIndex = Random.Range(0, dropItems.Length);
+            GameObject droppedItem = Instantiate(dropItems[randomIndex], transform.position, Quaternion.identity);
+            Debug.Log($"Quái r?t {droppedItem.name}");
+        }
+    }
 }
